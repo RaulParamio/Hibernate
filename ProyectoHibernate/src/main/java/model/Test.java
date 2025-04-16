@@ -18,7 +18,7 @@ public class Test {
 
 		} finally {
 
-		//HibernateUtil.closeSessionFactory();
+		HibernateUtil.closeSessionFactory();
 
 		}
 

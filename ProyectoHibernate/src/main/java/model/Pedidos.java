@@ -1,32 +1,36 @@
 package model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Pedidos")
 public class Pedidos {
-
+	
+	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "numPedido")
 	private Long numPedido;
 
-	@Column(name = "idCliente")
-	private Long idCliente;
+	@ManyToOne
+    @JoinColumn(name = "idCliente", nullable = false)
+    private Cliente cliente;
 
 	@Column(name = "fecha")
 	private String fecha;
 
-	public Pedidos(Long numPedido, Long idCliente, String fecha) {
+	public Pedidos(Long numPedido, Cliente cliente, String fecha) {
 		super();
 		this.numPedido = numPedido;
-		this.idCliente = idCliente;
+		this.cliente = cliente;
 		this.fecha = fecha;
 	}
 
-	public Pedidos(Long idCliente, String fecha) {
+	public Pedidos(Long idCliente, String fecha, EntityManager em) {
 		super();
-		this.idCliente = idCliente;
+		
 		this.fecha = fecha;
+        this.cliente = em.find(Cliente.class, idCliente);
 	}
 
 	public Pedidos() {
@@ -41,12 +45,12 @@ public class Pedidos {
 		this.numPedido = numPedido;
 	}
 
-	public Long getIdCliente() {
-		return idCliente;
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-	public void setIdCliente(Long idCliente) {
-		this.idCliente = idCliente;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
 	public String getFecha() {
@@ -59,7 +63,7 @@ public class Pedidos {
 
 	@Override
 	public String toString() {
-		return "Pedidos [numPedido=" + numPedido + ", idCliente=" + idCliente + ", fecha=" + fecha + "]";
+		return "Pedidos [numPedido=" + numPedido + ", cliente=" + cliente + ", fecha=" + fecha + "]";
 	}
 	
 	

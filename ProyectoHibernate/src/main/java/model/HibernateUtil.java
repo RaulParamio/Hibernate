@@ -113,11 +113,11 @@ public class HibernateUtil {
 
 			// builds a session factory from the service registry
 
-			MetadataSources metadataSources = new MetadataSources(standardRegistry)
+			MetadataSources metadataSources = new MetadataSources(standardRegistry);
 
-					.addPackage("model")
-
-					.addAnnotatedClass(model.Cliente.class);
+			metadataSources.addAnnotatedClass(model.Cliente.class);
+			metadataSources.addAnnotatedClass(model.Pedidos.class);
+			
 
 			Metadata metadata = metadataSources.getMetadataBuilder().build();
 
@@ -210,7 +210,7 @@ public class HibernateUtil {
 
 		MysqlDataSource ds = new MysqlDataSource();
 
-		ds.setURL("jdbc:mysql://10.11.1.5:3306/AccesoaDatos");
+		ds.setURL("jdbc:mysql://localhost:3306/AccesoaDatos");
 
 		ds.setUser("root");
 

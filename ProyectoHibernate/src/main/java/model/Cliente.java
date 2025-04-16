@@ -1,11 +1,15 @@
 package model;
 
-import javax.persistence.*;
+import java.util.List;
+
+
+import jakarta.persistence.*;
 
 
 @Entity
 @Table(name = "Cliente")
 public class Cliente {
+	
 	
 	
 	
@@ -26,14 +30,16 @@ public class Cliente {
 		this.provincia = provincia;
 	}
 
+	@OneToMany(mappedBy = "cliente", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	private List<Pedidos> pedidos;
 	
 	
-
 	@Id
-	@Column(name = "idCliente")
-	private int idCliente;	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "idCliente")	
+	private long idCliente;	
 	
-	@Column(name = "dni")
+	@Column(name = "dni", unique=true)
 	private String dni;
 	
 	@Column (name = "nombre")
@@ -53,7 +59,6 @@ public class Cliente {
 	
 	@Column (name = "provincia")
 	private String provincia;
-
 	
 	
 	
@@ -65,7 +70,7 @@ public class Cliente {
 	}
 
 
-	public int getIdCliente() {
+	public long getIdCliente() {
 		return idCliente;
 	}
 
