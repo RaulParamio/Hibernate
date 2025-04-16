@@ -1,13 +1,11 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import jakarta.persistence.NoResultException;
 
 
 public class RepositorioHibernateClienteImpl implements RepositorioHibernateCliente {
