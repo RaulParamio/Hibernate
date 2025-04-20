@@ -1,6 +1,6 @@
 package model;
 
-import jakarta.persistence.*;
+import java.sql.Date;
 
 public class Main {
 
@@ -13,7 +13,10 @@ public class Main {
 		Cliente prueba = new Cliente("123456788", "Gonzalo", "Ramirez", "gonzalo@gmail.com", "Av La Onu", "Cartagena",
 		"Murcia");
 		
-		Pedidos pedprueba = new Pedidos(4L, prueba, "21/6/2021");
+		//Cliente prueba_rec_cli = repohcli.getByDni("123456788");
+		
+		//Pedidos pedprueba = new Pedidos(prueba_rec_cli);
+	
 
 		
 
@@ -23,13 +26,13 @@ public class Main {
 		
 		//repohcli.save(prueba);
 
-		//repohcli.deleteById(17L);
+		//repohcli.deleteById(7L);
 
 		//repohcli.existsById(16L);
 		
 		//repohcli.findAll();
 
-		//repohcli.getByDni("123456787");
+		//repohcli.getByDni("123456788");
 
 		//repohcli.getById(16L);
 
@@ -39,20 +42,26 @@ public class Main {
 		
 		
 			
-		//System.out.println(repohped.count());
+		//repohped.count();
 		
 		//repohped.save(pedprueba);
 
 		//repohped.deleteAll();
 
-		//repohped.deleteById(1L);
+		//repohped.deleteById(15L);
 
-		//System.out.println(repohped.existsById(1L));
+		//repohped.existsById(24L);
 
-		//System.out.println(repohped.findAll());
+		//repohped.findAll();
 
-		//System.out.println(repohped.getById(1L));
+		//repohped.getById(24L);
+	
+		//Date fecha = Date.valueOf("2025-04-19");
+        //repohped.findByFecha(fecha);
+      
 
+		
+		
+		
 	}
-
 }

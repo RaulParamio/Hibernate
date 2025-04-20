@@ -2,124 +2,122 @@ package model;
 
 import java.sql.Date;
 import java.util.List;
-import org.hibernate.Session;
-
+import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RepositorioHibernatePedidosImpl implements IRepositorioPedido {
+	
+	private static final Logger logger = LoggerFactory.getLogger(RepositorioHibernatePedidosImpl.class);
 
-	Session session = HibernateUtil.getSessionFactory().openSession();
-
-	public long count() {
-
-		Session session = HibernateUtil.getSessionFactory().openSession();
-		session.beginTransaction();
-
-		String counthql = "SELECT COUNT(*)from Pedidos";
-		long contador =  session.createQuery(counthql, Long.class).getSingleResult();
-
-		session.close();
-		
-		System.out.print("\n"+"El numero total de pedidos es: ");
-
-		return contador;
+	// Contar el total de pedidos	
+	public long count() {		
+		 return TransactionExecutor.executeTransaction(session -> {
+            String hql = "SELECT COUNT(*) FROM Pedidos";
+            Long count = session.createQuery(hql, Long.class).getSingleResult();
+            logger.info("Total de pedidos: {}", count);
+            return count;
+        });	    
 	}
 
+	// Borrar todos de pedidos
 	public void deleteAll() {
+        TransactionExecutor.executeTransaction(session -> {
+            List<Pedidos> pedidos = session.createQuery("FROM Pedidos", Pedidos.class).list();
+            pedidos.forEach(session::remove);
+            logger.info("Todos los pedidos han sido eliminados correctamente");
+            return null;
+        });
+    }
 
-		Session session = HibernateUtil.getSessionFactory().openSession();
-		session.beginTransaction();
-
-		session.remove(Pedidos.class);
-		session.getTransaction().commit();
-
-		session.close();
-	}
-
+	// Obtener todos los pedidos
 	public List<Pedidos> findAll() {
-		Session session = HibernateUtil.getSessionFactory().openSession();
-		session.beginTransaction();
-
-		List<Pedidos> lista = session.createQuery("FROM Pedidos", Pedidos.class).list();
-
-		session.close();
-
-		return lista;
+		 return TransactionExecutor.executeTransaction(session -> {
+	            List<Pedidos> lista = session.createQuery("FROM Pedidos", Pedidos.class).list();
+	            if (lista.isEmpty()) {
+	                logger.info("No hay pedidos en la base de datos.");
+	            } else {
+	                for (Pedidos p : lista) {
+	                    logger.info("Pedido Nº {} - Fecha: {} - Cliente ID: {}",
+	                        p.getNumPedido(), p.getFecha(), p.getCliente().getIdCliente());
+	                }
+	            }
+	            return lista;
+	        });
 	}
 
+	// Método para borrar los pedidos por su ID
 	@Override
-
 	public void deleteById(Long id) {
-
-		Session session = HibernateUtil.getSessionFactory().openSession();
-		session.beginTransaction();
-
-		Pedidos pedidosdelid = session.get(Pedidos.class, id);
-		if (pedidosdelid != null) {
-			session.remove(pedidosdelid);
-		} else {
-			System.out.println("NO SE PUEDE BORRAR, NO EXISTEN PEDIDOS CON ESE ID...");
-		}
-
-		session.getTransaction().commit();
-
-		session.close();
+		 TransactionExecutor.executeTransaction(session -> {
+	            Pedidos pedido = session.get(Pedidos.class, id);
+	            if (pedido != null) {
+	                session.remove(pedido);
+	                logger.info("Pedido con ID {} eliminado correctamente.", id);
+	            } else {
+	                logger.warn("No se encontró pedido con ID {} para eliminar.", id);
+	            }
+	            return null;
+	        });
 	}
-
+	
+	// Verifica si un pedido existe por ID
 	@Override
-
 	public boolean existsById(Long id) {
-		Session session = HibernateUtil.getSessionFactory().openSession();
-		boolean idexiste = false;
-		session.beginTransaction();
-
-		if (session.get(Pedidos.class, id) != null) {
-			idexiste = true;
-		} else {
-			idexiste = false;
-			System.out.println("NO HAY PEDIDOS CON ESE ID");
-		}
-		session.close();
-
-		return idexiste;
+		return TransactionExecutor.executeTransaction(session -> {
+            boolean exists = session.get(Pedidos.class, id) != null;
+            if (exists) {
+                logger.info("El pedido con ID {} existe.", id);
+            } else {
+                logger.warn("El pedido con ID {} no existe.", id);
+            }
+            return exists;
+        });
 	}
-
+	
+	// Recupera un pedido por ID
 	@Override
-
 	public Pedidos getById(Long id) {
-
-		Session session = HibernateUtil.getSessionFactory().openSession();
-		session.beginTransaction();
-
-		Pedidos pedidoretid = session.byId(Pedidos.class).load(id);
-
-		session.close();
-
-		return pedidoretid;
+		return TransactionExecutor.executeTransaction(session -> {
+            Pedidos pedido = session.get(Pedidos.class, id);
+            if (pedido != null) {
+                logger.info("Pedido encontrado con ID {}: {}", id, pedido);
+            } else {
+                logger.warn("No se encontró pedido con ID {}.", id);
+            }
+            return pedido;
+        });
 	}
-
+	
+	// Guarda un pedido en la base de datos
 	@Override
-
 	public <S extends Pedidos> S save(S entity) {
-
-		Session session = HibernateUtil.getSessionFactory().openSession();
-		session.beginTransaction();
-
-		session.persist(entity);
-
-		session.getTransaction().commit();
-
-		session.close();
-		
-		
-
-		return entity;
+		return TransactionExecutor.executeTransaction(session -> {
+            session.persist(entity);
+            logger.info("Pedido guardado con Nº: {}", entity.getNumPedido());
+            return entity;
+        });
 	}
 
-	@Override
+	 // Busca pedidos por una fecha específica
+	 @Override
+	public List<Pedidos> findByFecha(Date fecha) {
+		 return TransactionExecutor.executeTransaction(session -> {
+            String hql = "FROM Pedidos p WHERE DATE(p.fecha) = :fecha";
+            Query<Pedidos> query = session.createQuery(hql, Pedidos.class);
+            query.setParameter("fecha", fecha);
 
-	public List<Pedidos> findByFecha(Date Fecha) {
+            List<Pedidos> result = query.list();
+            logger.info("Consulta ejecutada correctamente. Se encontraron {} pedidos para la fecha {}", result.size(), fecha);
 
-		return null;
+            if (result.isEmpty()) {
+                logger.info("No se encontraron pedidos para la fecha {}", fecha);
+            } else {
+                for (Pedidos p : result) {
+                    logger.info("Pedido Nº {} - Fecha: {} - Cliente ID: {}", p.getNumPedido(), p.getFecha(), p.getCliente().getIdCliente());
+                }
+            }
+            return result;
+        });
 	}
-
 }

@@ -10,203 +10,124 @@ import org.slf4j.LoggerFactory;
 
 public class RepositorioHibernateClienteImpl implements RepositorioHibernateCliente {
 
-	Session session = HibernateUtil.getSessionFactory().openSession();
-	private static final Logger logger = LoggerFactory.getLogger(RepositorioHibernatePedidosImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(RepositorioHibernateClienteImpl.class);
 
 	public long count() {
-
-		session.beginTransaction();
-
-		String counthql = "SELECT COUNT(*)from Cliente";
+		return TransactionExecutor.executeTransaction(session -> {
+		String counthql = "SELECT COUNT(*) FROM Cliente";
 		long contador = (long) session.createQuery(counthql, Long.class).uniqueResult();
-
-		session.close();
-		
-		System.out.print("\n"+"El numero total de clientes es: ");
-
+		logger.info("El numero total de clientes es: {}", counthql);
 		return contador;
-
+		});	  
 	}
 
 	public void deleteById(Long id) {
-
-		session.beginTransaction();
-
-		try {
-	        Cliente clientedelid = session.get(Cliente.class, id);
-
-	        if (clientedelid != null) {
-	            session.remove(clientedelid);
+		TransactionExecutor.executeTransaction(session -> {		
+	        Cliente cliente = session.get(Cliente.class, id);
+	        if (cliente != null) {
+	            session.remove(cliente);
 	            logger.info("Cliente con ID {} eliminado correctamente.", id);
 	        } else {
 	        	logger.warn("No se puede eliminar: no existe un cliente con ID {}", id);
 	        }
-
-	        session.getTransaction().commit();
-	    } catch (Exception e) {
-	        session.getTransaction().rollback();
-	        logger.error("Fallo al eliminar cliente con ID {}: {}", id, e.getMessage(), e);
-	    } finally {
-	        session.close();
-	    }
+	        return null;
+		});  
 	}
 
 	
 	public void deleteAll() {
-		
-		try {
-		session.beginTransaction();
-
+		TransactionExecutor.executeTransaction(session -> {
 		    List<Cliente> clientes = session.createQuery("FROM Cliente", Cliente.class).list();
 		    for (Cliente cliente : clientes) {
 		        session.remove(cliente);
 		        logger.info("Todos los clientes han sido eliminados con exito");
 		    }
-		    session.getTransaction().commit();
-		}catch(Exception e) {
-			logger.error("No se han podido eliminar todos los clientes", e);
-		}
-		 finally {   
-		    session.close();
-		 }
+		   return null;
+		});
 	}
 
 	public boolean existsById(Long id) {
-
-		boolean idexiste = false;
-		try {
-		session.beginTransaction();
-
-		if (session.get(Cliente.class, id) != null) {
-			idexiste = true;
-			logger.info("El cliente con ID: {} , EXISTE",id );
-		} else {
-			idexiste = false;
-			logger.info("El cliente con ID: {} , NO EXISTE",id );
-		}
-		}catch(Exception e) {
-			logger.error("Error al realizar la comprobacion del cliente con ID: {}", id, e);
-		}
-		finally {
-			session.close();
+		return TransactionExecutor.executeTransaction(session -> {
+		boolean idexiste = session.get(Cliente.class, id) != null;
+		if (idexiste) {
+			logger.info("El cliente con ID: {} , EXISTE", id );
+		} else { 
+			logger.info("El cliente con ID: {} , NO EXISTE", id );
 		}
 		return idexiste;
+		});
 	}
 
 
 	public List<Cliente> findAll() {
-
-		session.beginTransaction();
-
-		List<Cliente> lista = session.createQuery("FROM Cliente", Cliente.class).list();
-		
+		return TransactionExecutor.executeTransaction(session -> {
+		List<Cliente> lista = session.createQuery("FROM Cliente", Cliente.class).list();		
 		 if (lista.isEmpty()) {
 		        logger.info("No hay clientes en la base de datos.");
-		        }
-		 else {
+		 } else {
 			 logger.info("Listado de clientes: ");
 			 for(Cliente c:lista) {
 				 logger.info("\n"+c.toString());
 			 }
 		 }
-
-		session.close();
-
-		return lista;
-
+		 return lista;
+		});
 	}
 
 	@Override
 
 	public Cliente getById(Long id) {
-
-		Cliente clienteretid=null;
-		
-		try {
-		session.beginTransaction();
-		clienteretid = session.get(Cliente.class, id);
-		if (clienteretid != null) {
-            logger.info("Cliente encontrado con ID {}: {}", id, clienteretid);
+		return TransactionExecutor.executeTransaction(session -> {	
+		Cliente cliente = session.get(Cliente.class, id);
+		if (cliente != null) {
+            logger.info("Cliente encontrado con ID {}: {}", id, cliente);
         } else {
             logger.warn("No se encontró ningún cliente con ID {}", id);
         }
-		}catch(Exception e) {
-			logger.error("ERROR al obtener cliente por ID: {}",id ,e);
-		}
-		finally {
-		session.close();
-		}
-		return clienteretid;
-
+		return cliente;
+		});
 	}
 
 	@Override
 
 	public <S extends Cliente> S save(S entity) {
-		session.beginTransaction();
-
-		session.persist(entity);
-		session.flush();
-
-		session.getTransaction().commit();
-
-		session.close();
-		
+		return TransactionExecutor.executeTransaction(session -> {
+		session.persist(entity);	
 		logger.info("Entidad guardada correctamente con ID: {}", entity.getIdCliente());
-
 		return entity;
+		});
 
 	}
 
 	@Override
 
 	public Map<String, Cliente> getMapAll() {
-		Map<String, Cliente> mapacli = new HashMap<>();
-		
-		try {
-		session.beginTransaction();
-
-		List<Cliente> listacli = session.createQuery("FROM Cliente", Cliente.class).list();
-		for (Cliente clientegma : listacli) {
-			mapacli.put(clientegma.getDni(), clientegma);
-		}
-		}catch(Exception e) {
-			logger.error("Error al obtener los clientes: {}", e.getMessage());	
-		}
-		finally {
-		session.close();
-		}
-		
+		return TransactionExecutor.executeTransaction(session -> {
+		Map<String, Cliente> mapaClientes = new HashMap<>();
+		List<Cliente> listaclientes = session.createQuery("FROM Cliente", Cliente.class).list();
+		for (Cliente cliente : listaclientes) {
+			mapaClientes.put(cliente.getDni(), cliente);
+		}		
 		logger.info("Clientes en la base de datos:");
-	    for (Cliente cliente : mapacli.values()) {
+	    for (Cliente cliente : mapaClientes.values()) {
 	        logger.info("\n" + cliente);
-	    }
-		
-		return mapacli;
-
+	    }		
+		return mapaClientes;
+		});
 	}
 
 	@Override
 
 	public Cliente getByDni(String dni) {
-		Cliente cliente = new Cliente();
-	try{
-		session.beginTransaction();
-		cliente = session.createQuery("FROM Cliente WHERE dni = :dni", Cliente.class).setParameter("dni", dni).uniqueResult();
-		if(cliente!=null) {
+		return TransactionExecutor.executeTransaction(session -> {
+		Cliente cliente = session.createQuery("FROM Cliente WHERE dni = :dni", Cliente.class).setParameter("dni", dni).uniqueResult();
+		if(cliente != null) {
 		logger.info("El cliente con dni:{} es: {}" ,dni, cliente);
 		}else {
 			logger.info("El cliente con dni:{} NO EXISTE" ,dni);
-		}
-	     
-	}catch (Exception e) {
-		 logger.error("Error al obtener clientes por DNI", e);
-  
-    }finally {
-    	session.close();
-    }
-
+		}     
 		return cliente;
+		});
 	}
 
 }

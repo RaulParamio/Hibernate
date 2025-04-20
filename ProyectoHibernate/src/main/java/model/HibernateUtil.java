@@ -191,7 +191,6 @@ public class HibernateUtil {
 
 	}
 
-	@SuppressWarnings("unused")
 	private static DataSource getH2DataSource() {
 
 		JdbcDataSource ds = new JdbcDataSource();
@@ -218,7 +217,7 @@ public class HibernateUtil {
 
 		try {
 
-			ds.setServerTimezone("UTC");
+			ds.setServerTimezone("Europe/Madrid");
 
 		} catch (SQLException e) {
 
