@@ -5,10 +5,11 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @AllArgsConstructor 
-@NoArgsConstructor   
-@Entity
-@Data
+@NoArgsConstructor
+@Getter
+@Setter
 @ToString(exclude = "pedidos")
+@Entity
 @Table(name = "Cliente")
 public class Cliente {
 	

@@ -46,7 +46,7 @@ public class RepositorioHibernatePedidosImpl implements IRepositorioPedido {
 	        });
 	}
 
-	// Método para borrar los pedidos por su ID
+	// Método para borrar un pedido por su ID
 	@Override
 	public void deleteById(Long id) {
 		 TransactionExecutor.executeTransaction(session -> {

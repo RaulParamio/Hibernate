@@ -3,7 +3,6 @@ package model;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +10,8 @@ import org.slf4j.LoggerFactory;
 public class RepositorioHibernateClienteImpl implements RepositorioHibernateCliente {
 
 	private static final Logger logger = LoggerFactory.getLogger(RepositorioHibernateClienteImpl.class);
-
+	
+	// Contar el total de clientes
 	public long count() {
 		return TransactionExecutor.executeTransaction(session -> {
 		String counthql = "SELECT COUNT(*) FROM Cliente";
@@ -21,6 +21,7 @@ public class RepositorioHibernateClienteImpl implements RepositorioHibernateClie
 		});	  
 	}
 
+	// Borra un cliente por su ID
 	public void deleteById(Long id) {
 		TransactionExecutor.executeTransaction(session -> {		
 	        Cliente cliente = session.get(Cliente.class, id);
@@ -34,7 +35,7 @@ public class RepositorioHibernateClienteImpl implements RepositorioHibernateClie
 		});  
 	}
 
-	
+	// Borra todos los clientes
 	public void deleteAll() {
 		TransactionExecutor.executeTransaction(session -> {
 		    List<Cliente> clientes = session.createQuery("FROM Cliente", Cliente.class).list();
@@ -46,6 +47,7 @@ public class RepositorioHibernateClienteImpl implements RepositorioHibernateClie
 		});
 	}
 
+	// Verifica si un cliente existe por ID
 	public boolean existsById(Long id) {
 		return TransactionExecutor.executeTransaction(session -> {
 		boolean idexiste = session.get(Cliente.class, id) != null;
@@ -59,6 +61,7 @@ public class RepositorioHibernateClienteImpl implements RepositorioHibernateClie
 	}
 
 
+	// Recupera lista de clientes
 	public List<Cliente> findAll() {
 		return TransactionExecutor.executeTransaction(session -> {
 		List<Cliente> lista = session.createQuery("FROM Cliente", Cliente.class).list();		
@@ -74,8 +77,8 @@ public class RepositorioHibernateClienteImpl implements RepositorioHibernateClie
 		});
 	}
 
+	// Recupera un cliente por ID
 	@Override
-
 	public Cliente getById(Long id) {
 		return TransactionExecutor.executeTransaction(session -> {	
 		Cliente cliente = session.get(Cliente.class, id);
@@ -88,19 +91,18 @@ public class RepositorioHibernateClienteImpl implements RepositorioHibernateClie
 		});
 	}
 
+	// Guarda un cliente en la base de datos
 	@Override
-
 	public <S extends Cliente> S save(S entity) {
 		return TransactionExecutor.executeTransaction(session -> {
 		session.persist(entity);	
 		logger.info("Entidad guardada correctamente con ID: {}", entity.getIdCliente());
 		return entity;
 		});
-
 	}
 
-	@Override
-
+	 // Recupera todos los clientes y los almacena en un Map con su dni como clave
+	@Override	
 	public Map<String, Cliente> getMapAll() {
 		return TransactionExecutor.executeTransaction(session -> {
 		Map<String, Cliente> mapaClientes = new HashMap<>();
@@ -116,8 +118,8 @@ public class RepositorioHibernateClienteImpl implements RepositorioHibernateClie
 		});
 	}
 
+	// Recupera un cliente por dni
 	@Override
-
 	public Cliente getByDni(String dni) {
 		return TransactionExecutor.executeTransaction(session -> {
 		Cliente cliente = session.createQuery("FROM Cliente WHERE dni = :dni", Cliente.class).setParameter("dni", dni).uniqueResult();

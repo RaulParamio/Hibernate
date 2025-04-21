@@ -40,6 +40,7 @@ import net.ttddyy.dsproxy.listener.logging.SystemOutQueryLoggingListener;
 
 import net.ttddyy.dsproxy.support.ProxyDataSourceBuilder;
 
+// Clase de configuracion
 public class HibernateUtil {
 
 	private static SessionFactory sessionFactory;
@@ -75,11 +76,11 @@ public class HibernateUtil {
 			// @see
 			// https://docs.jboss.org/hibernate/orm/5.4/javadocs/org/hibernate/cfg/Environment.html
 
-//            Map<String,String> gestoresDeBD= new HashMap<>();
+            // Map<String,String> gestoresDeBD= new HashMap<>();
 
-//            gestoresDeBD.put("H2", value)
+            // gestoresDeBD.put("H2", value)
 
-//            String gestorUtilizado="MySQL";
+            // String gestorUtilizado="MySQL";
 
 			Map<String, Object> settings = new HashMap<String, Object>();
 

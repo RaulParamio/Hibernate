@@ -5,9 +5,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TransactionExecutor {
+	
 	private static final Logger logger = LoggerFactory.getLogger(TransactionExecutor.class);
 	
-	 // Método para gestionar transacciones
+	 /** Método para gestionar transacciones con Hibernate
+	  * Se encarga de abrir la sesion, iniciar la transaccion, ejecutar la operacion,
+	  * y luego de hacer commit o rollback segun el resultado 
+	  * 
+	  */
    public static <T> T executeTransaction(TransactionCallback<T> transaction) {
        Session session = HibernateUtil.getSessionFactory().openSession();
        T result = null;

@@ -9,9 +9,9 @@ import lombok.*;
 @NoArgsConstructor   
 @Entity
 @Table(name = "Pedidos")
-@Data
+@Getter
+@Setter
 public class Pedidos {
-	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +22,7 @@ public class Pedidos {
     @JoinColumn(name = "idCliente", nullable = false)
     private Cliente cliente;
 
-	@Column(name = "fecha", updatable = false)
+	@Column(name = "fecha", nullable = false, updatable = false)
 	@CreationTimestamp
 	private LocalDateTime fecha;
 
@@ -31,14 +31,6 @@ public class Pedidos {
 		super();
 		this.cliente = cliente;
 	}
-
-
-	
-	
-	
-	
-	
-	
 	
 	
 }
