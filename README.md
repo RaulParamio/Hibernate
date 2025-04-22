@@ -30,7 +30,6 @@ Esta app permite:
 
 El proyecto está organizado en capas para una mejor separación de responsabilidades:
 
-## 🧱 Estructura del proyecto
 
 | Carpeta         | Descripción                                                  |
 |-----------------|--------------------------------------------------------------|
