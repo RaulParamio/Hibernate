@@ -30,8 +30,9 @@ Esta app permite:
 
 El proyecto está organizado en capas para una mejor separación de responsabilidades:
 
-src/ ├── model/ → Entidades Cliente y Pedido
-├── repository/ → Patrón repositorio y sus implementaciones
-├── transaction/ → Lógica de manejo de transacciones con Hibernate
-├── util/ → Gestión de Hibernate 
-├── app/ → Clase principal que ejecuta la aplicación
+src/
+├── model/        → 🧾 Entidades Cliente y Pedido
+├── repository/   → 📁 Patrón repositorio y sus implementaciones
+├── transaction/  → 🔄 Lógica de manejo de transacciones con Hibernate
+├── util/         → ⚙️ Gestión de la configuración de Hibernate
+├── app/          → 🚀 Clase principal que ejecuta la aplicación
