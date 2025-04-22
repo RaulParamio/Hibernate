@@ -15,3 +15,11 @@ implementadas con una arquitectura orientada a buenas prácticas, como la separa
 - **JDK 11 o superior**.
 - **MySQL**: Base de datos relacional.
 - **Maven**: Para la gestión de dependencias y la construcción del proyecto.
+
+Esta app permite:
+
+- ➕ Crear clientes y pedidos
+- 🧾 Consultar información
+- ✏️ Modificar registros
+- ❌ Eliminar clientes y sus pedidos asociados
+- 🔄 Gestionar todo dentro de transacciones seguras
