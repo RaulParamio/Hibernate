@@ -38,3 +38,14 @@ El proyecto está organizado en capas para una mejor separación de responsabili
 | `transaction/`  | 🔄 Lógica de manejo de transacciones con Hibernate            |
 | `util/`         | ⚙️ Configuración y utilidades de Hibernate                    |
 | `app/`          | 🚀 Clase principal que ejecuta la aplicación (`MainApp.java`) |
+
+
+## ▶️ Cómo ejecutar el proyecto
+
+1. 📥 Clona el repositorio:
+
+2. 🛠️ Importa el proyecto en tu IDE favorito (Eclipse, IntelliJ, etc.)
+
+3. 🧩 Asegúrate de tener una base de datos MySQL y utiliza los datos de conexión del metodo getMySQLDataSource() en el archivo HibernateUtil.
+
+4. ▶️ Ejecuta la clase MainApp para probar las operaciones.
