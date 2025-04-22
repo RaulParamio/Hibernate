@@ -16,6 +16,8 @@ implementadas con una arquitectura orientada a buenas prácticas, como la separa
 - **MySQL**: Base de datos relacional.
 - **Maven**: Para la gestión de dependencias y la construcción del proyecto.
 
+## ⚙️ ¿Qué hace esta aplicación?
+
 Esta app permite:
 
 - ➕ Crear clientes y pedidos
