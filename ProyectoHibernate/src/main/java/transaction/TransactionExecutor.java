@@ -1,8 +1,10 @@
-package model;
+package transaction;
 
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import util.HibernateUtil;
 
 public class TransactionExecutor {
 	

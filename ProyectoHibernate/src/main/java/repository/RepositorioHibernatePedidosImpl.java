@@ -1,10 +1,12 @@
-package model;
+package repository;
 
 import java.sql.Date;
 import java.util.List;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import model.Pedidos;
+import transaction.TransactionExecutor;
 
 public class RepositorioHibernatePedidosImpl implements IRepositorioPedido {
 	

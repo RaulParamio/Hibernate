@@ -1,6 +1,8 @@
-package model;
+package app;
 
 import org.hibernate.Session;
+
+import util.HibernateUtil;
 
 public class Test {
 

@@ -1,6 +1,10 @@
-package model;
+package app;
 
 import java.sql.Date;
+import model.Cliente;
+import model.Pedidos;
+import repository.RepositorioHibernateClienteImpl;
+import repository.RepositorioHibernatePedidosImpl;
 
 public class Main {
 
@@ -13,14 +17,14 @@ public class Main {
 		Cliente prueba = new Cliente("123456788", "Gonzalo", "Ramirez", "gonzalo@gmail.com", "Av La Onu", "Cartagena",
 		"Murcia");
 		
-		//Cliente prueba_rec_cli = repohcli.getByDni("123456788");
+		Cliente prueba_rec_cli = repohcli.getByDni("123456788");
 		
-		//Pedidos pedprueba = new Pedidos(prueba_rec_cli);
+		Pedidos pedprueba = new Pedidos(prueba_rec_cli);
 	
 
 		
 
-		//System.out.println(repohcli.count());
+		//repohcli.count();
 
 		//repohcli.deleteAll();
 		
@@ -28,13 +32,13 @@ public class Main {
 
 		//repohcli.deleteById(7L);
 
-		//repohcli.existsById(16L);
+		//repohcli.existsById(18L);
 		
 		//repohcli.findAll();
 
 		//repohcli.getByDni("123456788");
 
-		//repohcli.getById(16L);
+		//repohcli.getById(18L);
 
 		//repohcli.getMapAll();
 		

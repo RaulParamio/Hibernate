@@ -1,10 +1,12 @@
-package model;
+package repository;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import model.Cliente;
+import transaction.TransactionExecutor;
 
 
 public class RepositorioHibernateClienteImpl implements RepositorioHibernateCliente {
@@ -16,7 +18,7 @@ public class RepositorioHibernateClienteImpl implements RepositorioHibernateClie
 		return TransactionExecutor.executeTransaction(session -> {
 		String counthql = "SELECT COUNT(*) FROM Cliente";
 		long contador = (long) session.createQuery(counthql, Long.class).uniqueResult();
-		logger.info("El numero total de clientes es: {}", counthql);
+		logger.info("El numero total de clientes es: {}", contador);
 		return contador;
 		});	  
 	}

@@ -1,4 +1,4 @@
-package model;
+package transaction;
 
 import org.hibernate.Session;
 
