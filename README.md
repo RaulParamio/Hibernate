@@ -34,7 +34,7 @@ El proyecto está organizado en capas para una mejor separación de responsabili
 | Carpeta         | Descripción                                                  |
 |-----------------|--------------------------------------------------------------|
 | `model/`        | 🧾 Entidades `Cliente` y `Pedido`                             |
-| `repository/`   | 📁 Implementación del patrón repositorio                      |
+| `repository/`   | 📁 Patrón repositorio y sus implementaciones                      |
 | `transaction/`  | 🔄 Lógica de manejo de transacciones con Hibernate            |
 | `util/`         | ⚙️ Configuración y utilidades de Hibernate                    |
 | `app/`          | 🚀 Clase principal que ejecuta la aplicación (`MainApp.java`) |
